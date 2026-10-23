@@ -1,6 +1,20 @@
+<p align="center">
+  <img src="images/icon.jpg" width="150" alt="Project Icon">
+</p>
+
 # TermWave
 
 A terminal-inspired YouTube audio player with YouTube search, a playback queue, cover art, play/pause, seek, volume, shuffle, repeat modes, a Web Audio visualizer, light/dark themes, and customizable accent colors.
+
+## Screenshots
+
+<table>
+  <tr>
+    <td><img src="images/1.png" width="400" alt="TermWave Desktop UI, playing Aria Math by C410"></td>
+     <td><img src="images/3.png" height="400" alt="TermWave Mobile UI, Playing Mister Kill Myself by Sewerslvt."></td>
+  </tr>
+</table>
+
 
 ## Requirements
 
