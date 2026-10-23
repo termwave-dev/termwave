@@ -1,3 +1,4 @@
+
 const express = require('express');
 const { spawn } = require('node:child_process');
 const { Readable } = require('node:stream');
@@ -68,7 +69,6 @@ function runYtDlp(args, timeout = 30000) {
 
     child.on('close', code => {
       if (code !== 0) {
-        // Keep detailed diagnostics in server logs, not HTTP responses.
         console.error('yt-dlp failed with exit code:', code);
         console.error('yt-dlp stderr:', stderr.slice(-12000));
 
@@ -77,15 +77,17 @@ function runYtDlp(args, timeout = 30000) {
         return;
       }
 
-      // Show PO Token provider discovery when verbose mode is enabled.
       const providerLines = stderr
       .split('\n')
       .filter(line =>
-      /PO Token Providers|bgutil|pot provider|plugin directories/i.test(line)
+      /PO Token Providers|Generating a .*PO Token|bgutil|pot provider|plugin directories/i.test(line)
       );
 
       if (providerLines.length) {
-        console.log('yt-dlp provider diagnostics:', providerLines.join('\n'));
+        console.log(
+          'yt-dlp provider diagnostics:',
+          providerLines.join('\n')
+        );
       }
 
       finish(null, stdout.trim());
@@ -99,8 +101,13 @@ function isYouTubeUrl(value) {
     const host = url.hostname.toLowerCase();
 
     return (
-      ['youtube.com', 'www.youtube.com', 'm.youtube.com',
-      'music.youtube.com', 'youtu.be'].includes(host) &&
+      [
+        'youtube.com',
+        'www.youtube.com',
+        'm.youtube.com',
+        'music.youtube.com',
+        'youtu.be'
+      ].includes(host) &&
       ['https:', 'http:'].includes(url.protocol)
     );
   } catch {
@@ -111,8 +118,12 @@ function isYouTubeUrl(value) {
 function getFriendlyError(error) {
   const message = String(error?.message || error);
 
-  if (/sign in to confirm|not a bot|confirm you're not a bot|automated queries/i.test(message)) {
-    return 'YouTube is blocking requests from this server as automated traffic. Check the server logs for PO Token provider diagnostics. A valid cookies file may also be needed.';
+  if (
+    /sign in to confirm|not a bot|confirm you're not a bot|automated queries|LOGIN_REQUIRED/i.test(
+      message
+    )
+  ) {
+    return 'YouTube is blocking requests from this server as automated traffic. Check the server logs for PO Token diagnostics. A valid cookies file may also be required.';
   }
 
   if (/timed out/i.test(message)) {
@@ -124,7 +135,6 @@ function getFriendlyError(error) {
 
 function getYouTubeUrl(req) {
   const url = String(req.query.url || '');
-
   return isYouTubeUrl(url) ? url : null;
 }
 
@@ -133,11 +143,15 @@ app.get('/api/search', async (req, res) => {
   const query = String(req.query.q || '').trim();
 
   if (!query) {
-    return res.status(400).json({ error: 'Enter a search query.' });
+    return res.status(400).json({
+      error: 'Enter a search query.'
+    });
   }
 
   if (query.length > 180) {
-    return res.status(400).json({ error: 'Search query is too long.' });
+    return res.status(400).json({
+      error: 'Search query is too long.'
+    });
   }
 
   try {
@@ -202,15 +216,24 @@ app.get('/api/audio', async (req, res) => {
   const url = getYouTubeUrl(req);
 
   if (!url) {
-    return res.status(400).send('Only valid YouTube URLs are supported.');
+    return res.status(400).send(
+      'Only valid YouTube URLs are supported.'
+    );
   }
 
   let direct;
 
   try {
-    // Verbose output lets us diagnose PO Token provider discovery.
     direct = await runYtDlp([
       '--verbose',
+
+      // Explicitly enable the Node.js JavaScript runtime.
+      '--js-runtimes', 'node',
+
+      // Try player clients that may avoid the failing default path.
+      '--extractor-args',
+      'youtube:player-client=mweb,tv,web_safari',
+
       '--no-playlist',
       '-f', 'bestaudio/best',
       '-g',
@@ -267,11 +290,13 @@ app.get('/api/audio', async (req, res) => {
       signal: AbortSignal.timeout(45000)
     });
 
-    // Preserve range errors as well as normal and partial responses.
     if (![200, 206, 416].includes(upstream.status)) {
       await upstream.body?.cancel().catch(() => {});
 
-      console.error('Upstream media server returned HTTP', upstream.status);
+      console.error(
+        'Upstream media server returned HTTP',
+        upstream.status
+      );
 
       return res.status(502).send(
         `YouTube media server returned HTTP ${upstream.status}.`
@@ -287,12 +312,14 @@ app.get('/api/audio', async (req, res) => {
       'accept-ranges'
     ]) {
       const value = upstream.headers.get(header);
-      if (value) res.setHeader(header, value);
+
+      if (value) {
+        res.setHeader(header, value);
+      }
     }
 
     res.setHeader('Cache-Control', 'no-store');
 
-    // A 416 response usually has no body.
     if (upstream.status === 416 || !upstream.body) {
       await upstream.body?.cancel().catch(() => {});
       return res.end();
