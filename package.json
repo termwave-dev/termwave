@@ -1,0 +1,10 @@
+{
+  "name": "termwave-player",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Terminal-inspired YouTube audio player powered by yt-dlp",
+  "main": "server.js",
+  "scripts": { "start": "node server.js", "dev": "node server.js" },
+  "dependencies": { "express": "^4.21.2" },
+  "engines": { "node": ">=18" }
+}
