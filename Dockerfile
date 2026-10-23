@@ -7,7 +7,7 @@ RUN apt-get update \
     && apt-get install -y --no-install-recommends \
        python3 python3-pip ffmpeg ca-certificates git \
     && pip3 install --break-system-packages --no-cache-dir \
-       -U yt-dlp bgutil-ytdlp-pot-provider \
+       "yt-dlp[default]" bgutil-ytdlp-pot-provider \
     && git clone --depth 1 \
        --single-branch --branch 2.0.2 \
        https://github.com/Brainicism/bgutil-ytdlp-pot-provider.git \
