@@ -18,3 +18,5 @@ RUN npm install --omit=dev
 COPY . .
 
 EXPOSE 3000
+
+CMD ["sh", "-c", "node /opt/bgutil-provider/server/build/main.js --host 127.0.0.1 --port 4416 & exec npm start"]
