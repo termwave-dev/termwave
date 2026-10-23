@@ -1,10 +1,8 @@
-
 FROM node:22-bookworm-slim
 
 ENV NODE_ENV=production
 WORKDIR /app
 
-# Install system dependencies and yt-dlp's PO Token plugin.
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
        python3 python3-pip ffmpeg ca-certificates git \
@@ -16,8 +14,8 @@ RUN apt-get update \
        /opt/bgutil-provider \
     && cd /opt/bgutil-provider/server \
     && npm ci \
-    && npm install --no-save typescript \
-    && npx --no-install tsc \
+    && npm install --no-save --include=dev typescript \
+    && ./node_modules/.bin/tsc \
     && test -f /opt/bgutil-provider/server/build/main.js \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
