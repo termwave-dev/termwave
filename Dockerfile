@@ -16,7 +16,8 @@ RUN apt-get update \
        /opt/bgutil-provider \
     && cd /opt/bgutil-provider/server \
     && npm ci \
-    && npx tsc \
+    && npm install --no-save typescript \
+    && npx --no-install tsc \
     && test -f /opt/bgutil-provider/server/build/main.js \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
