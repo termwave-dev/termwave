@@ -27,4 +27,6 @@ COPY . .
 
 EXPOSE 3000
 
-CMD ["sh", "-c", "node /opt/bgutil-provider/server/build/main.js --host 127.0.0.1 --port 4416 & PROVIDER_PID=$!; sleep 2; kill -0 $PROVIDER_PID || exit 1; exec npm start"]
+
+CMD ["sh", "-c", "set -eu; node /opt/bgutil-provider/server/build/main.js --host 127.0.0.1 --port 4416 & PROVIDER_PID=$!; sleep 2; kill -0 \"$PROVIDER_PID\"; if [ ! -f /etc/secrets/youtube-cookies.txt ]; then echo 'ERROR: YouTube cookies secret is missing'; exit 1; fi; cp /etc/secrets/youtube-cookies.txt /tmp/youtube-cookies.txt; chmod 600 /tmp/youtube-cookies.txt; export YTDLP_COOKIES_FILE=/tmp/youtube-cookies.txt; echo \"Cookies copied to writable path: $YTDLP_COOKIES_FILE\"; exec npm start"]
+
