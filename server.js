@@ -178,38 +178,32 @@ app.get('/api/audio', async (req, res) => {
     return res.status(400).send('Only valid YouTube URLs are supported.');
   }
 
-  // Start with yt-dlp's default clients. If extraction fails, try an
-  // additional client combination. These are fallbacks, not guarantees.
-  const extractionAttempts = [
-    [],
-    [
-      '--extractor-args',
-      'youtube:player_client=default,web_safari'
-    ]
-  ];
-
+  // Use yt-dlp's default client selection so the bgutil PO Token
+  // provider plugin can work automatically.
   let direct;
-  let lastError;
 
-  for (const extraArgs of extractionAttempts) {
-    try {
-      direct = await runYtDlp([
-        '--no-warnings',
-        '--no-playlist',
-        '-f', 'bestaudio/best',
-        '-g',
-        ...extraArgs,
-        url
-      ], 45000);
+  try {
+    direct = await runYtDlp([
+      '--no-warnings',
+      '--no-playlist',
+      '-f', 'bestaudio/best',
+      '-g',
+      url
+    ], 45000);
+  } catch (error) {
+    if (res.destroyed || res.writableEnded) return;
 
-      if (direct) break;
-      lastError = new Error('yt-dlp returned an empty media URL.');
-    } catch (error) {
-      lastError = error;
+    console.error('Audio extraction failed:', error.message);
 
-      // Don't keep retrying once the client disconnects.
-      if (res.destroyed || res.writableEnded) return;
-    }
+    return res.status(502).send(
+      `Audio proxy failed: ${getFriendlyError(error)}`
+    );
+  }
+
+  if (!direct) {
+    return res.status(502).send(
+      'Audio proxy failed: yt-dlp returned an empty media URL.'
+    );
   }
 
   if (!direct) {
