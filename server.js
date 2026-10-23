@@ -1,4 +1,3 @@
-
 const express = require('express');
 const { spawn } = require('node:child_process');
 const { Readable } = require('node:stream');
@@ -8,10 +7,8 @@ const fs = require('node:fs');
 const app = express();
 const PORT = Number(process.env.PORT) || 3000;
 const YTDLP = process.env.YTDLP_PATH || 'yt-dlp';
-
-// Optional: configure this as a private Render environment variable.
-// Never commit your cookies file to GitHub.
 const COOKIES_FILE = process.env.YTDLP_COOKIES_FILE || '';
+const AUDIO_TIMEOUT = Number(process.env.YTDLP_AUDIO_TIMEOUT) || 60000;
 
 app.disable('x-powered-by');
 app.use(express.static(path.join(__dirname, 'public')));
@@ -28,48 +25,71 @@ function ytDlpArgs(args) {
 
 function runYtDlp(args, timeout = 30000) {
   return new Promise((resolve, reject) => {
-    const child = spawn(YTDLP, ytDlpArgs(args), {
-      stdio: ['ignore', 'pipe', 'pipe']
-    });
+    let child;
+
+    try {
+      child = spawn(YTDLP, ytDlpArgs(args), {
+        stdio: ['ignore', 'pipe', 'pipe']
+      });
+    } catch (error) {
+      reject(new Error(`Could not start yt-dlp: ${error.message}`));
+      return;
+    }
 
     let stdout = '';
     let stderr = '';
     let settled = false;
 
-    const finish = (error, result) => {
+    const timer = setTimeout(() => {
+      child.kill('SIGKILL');
+      finish(new Error(`yt-dlp timed out after ${timeout} ms.`));
+    }, timeout);
+
+    function finish(error, result) {
       if (settled) return;
       settled = true;
       clearTimeout(timer);
 
       if (error) reject(error);
       else resolve(result);
-    };
+    }
 
-      const timer = setTimeout(() => {
-        child.kill('SIGKILL');
-        finish(new Error('yt-dlp timed out.'));
-      }, timeout);
+    child.stdout.on('data', data => {
+      stdout += data.toString();
+    });
 
-      child.stdout.on('data', data => {
-        stdout += data.toString();
-      });
+    child.stderr.on('data', data => {
+      stderr += data.toString();
+    });
 
-      child.stderr.on('data', data => {
-        stderr += data.toString();
-      });
+    child.on('error', error => {
+      finish(new Error(`Could not start yt-dlp: ${error.message}`));
+    });
 
-      child.on('error', error => {
-        finish(new Error(`Could not start yt-dlp: ${error.message}`));
-      });
+    child.on('close', code => {
+      if (code !== 0) {
+        // Keep detailed diagnostics in server logs, not HTTP responses.
+        console.error('yt-dlp failed with exit code:', code);
+        console.error('yt-dlp stderr:', stderr.slice(-12000));
 
-      child.on('close', code => {
-        if (code !== 0) {
-          const message = stderr.trim().split('\n').slice(-3).join(' ');
-          finish(new Error(message || `yt-dlp exited with code ${code}`));
-        } else {
-          finish(null, stdout.trim());
-        }
-      });
+        const message = stderr.trim().split('\n').slice(-5).join(' ');
+        finish(new Error(message || `yt-dlp exited with code ${code}`));
+        return;
+      }
+
+      // Show PO Token provider discovery when verbose mode is enabled.
+      const providerLines = stderr
+      .split('\n')
+      .filter(line =>
+      /PO Token Providers|bgutil|pot provider|plugin directories/i.test(line)
+      );
+
+      if (providerLines.length) {
+        console.log('yt-dlp provider diagnostics:', providerLines.join('\n'));
+      }
+
+      finish(null, stdout.trim());
+    });
   });
 }
 
@@ -81,7 +101,7 @@ function isYouTubeUrl(value) {
     return (
       ['youtube.com', 'www.youtube.com', 'm.youtube.com',
       'music.youtube.com', 'youtu.be'].includes(host) &&
-      (url.protocol === 'https:' || url.protocol === 'http:')
+      ['https:', 'http:'].includes(url.protocol)
     );
   } catch {
     return false;
@@ -91,8 +111,8 @@ function isYouTubeUrl(value) {
 function getFriendlyError(error) {
   const message = String(error?.message || error);
 
-  if (/sign in to confirm|not a bot|confirm you're not a bot/i.test(message)) {
-    return 'YouTube is blocking requests from this server as automated traffic. Alternate player clients may not fix this. Configure a valid cookies file or a supported PO Token provider, if appropriate.';
+  if (/sign in to confirm|not a bot|confirm you're not a bot|automated queries/i.test(message)) {
+    return 'YouTube is blocking requests from this server as automated traffic. Check the server logs for PO Token provider diagnostics. A valid cookies file may also be needed.';
   }
 
   if (/timed out/i.test(message)) {
@@ -100,6 +120,12 @@ function getFriendlyError(error) {
   }
 
   return message.slice(-1200);
+}
+
+function getYouTubeUrl(req) {
+  const url = String(req.query.url || '');
+
+  return isYouTubeUrl(url) ? url : null;
 }
 
 // Search YouTube.
@@ -149,6 +175,7 @@ app.get('/api/search', async (req, res) => {
     return res.json({ results });
   } catch (error) {
     console.error('Search failed:', error.message);
+
     return res.status(502).json({
       error: getFriendlyError(error)
     });
@@ -157,9 +184,9 @@ app.get('/api/search', async (req, res) => {
 
 // Return the same-origin audio proxy URL.
 app.get('/api/stream', (req, res) => {
-  const url = String(req.query.url || '');
+  const url = getYouTubeUrl(req);
 
-  if (!isYouTubeUrl(url)) {
+  if (!url) {
     return res.status(400).json({
       error: 'Only valid YouTube URLs are supported.'
     });
@@ -172,51 +199,46 @@ app.get('/api/stream', (req, res) => {
 
 // Extract an audio URL, then proxy its bytes to the browser.
 app.get('/api/audio', async (req, res) => {
-  const url = String(req.query.url || '');
+  const url = getYouTubeUrl(req);
 
-  if (!isYouTubeUrl(url)) {
+  if (!url) {
     return res.status(400).send('Only valid YouTube URLs are supported.');
   }
 
-  // Use yt-dlp's default client selection so the bgutil PO Token
-  // provider plugin can work automatically.
   let direct;
 
   try {
+    // Verbose output lets us diagnose PO Token provider discovery.
     direct = await runYtDlp([
-      '--no-warnings',
+      '--verbose',
       '--no-playlist',
       '-f', 'bestaudio/best',
       '-g',
       url
-    ], 45000);
+    ], AUDIO_TIMEOUT);
   } catch (error) {
-    if (res.destroyed || res.writableEnded) return;
-
     console.error('Audio extraction failed:', error.message);
 
-    return res.status(502).send(
-      `Audio proxy failed: ${getFriendlyError(error)}`
-    );
+    if (!res.headersSent && !res.destroyed) {
+      return res.status(502).send(
+        `Audio proxy failed: ${getFriendlyError(error)}`
+      );
+    }
+
+    return;
   }
 
   if (!direct) {
+    console.error('yt-dlp returned an empty media URL.');
+
     return res.status(502).send(
       'Audio proxy failed: yt-dlp returned an empty media URL.'
     );
   }
 
-  if (!direct) {
-    console.error('Audio extraction failed:', lastError?.message);
-
-    return res.status(502).send(
-      `Audio proxy failed: ${getFriendlyError(lastError)}`
-    );
-  }
-
   const streamUrl = direct.split('\n')[0].trim();
-
   let mediaUrl;
+
   try {
     mediaUrl = new URL(streamUrl);
   } catch {
@@ -234,6 +256,7 @@ app.get('/api/audio', async (req, res) => {
   try {
     const headers = {};
 
+    // Forward browser seeking/range requests to the media server.
     if (req.headers.range) {
       headers.Range = req.headers.range;
     }
@@ -241,18 +264,18 @@ app.get('/api/audio', async (req, res) => {
     const upstream = await fetch(mediaUrl, {
       headers,
       redirect: 'follow',
-      signal: AbortSignal.timeout(30000)
+      signal: AbortSignal.timeout(45000)
     });
 
-    if (!upstream.ok && upstream.status !== 206) {
+    // Preserve range errors as well as normal and partial responses.
+    if (![200, 206, 416].includes(upstream.status)) {
       await upstream.body?.cancel().catch(() => {});
+
+      console.error('Upstream media server returned HTTP', upstream.status);
+
       return res.status(502).send(
         `YouTube media server returned HTTP ${upstream.status}.`
       );
-    }
-
-    if (!upstream.body) {
-      return res.status(502).send('Empty media response.');
     }
 
     res.status(upstream.status);
@@ -269,32 +292,43 @@ app.get('/api/audio', async (req, res) => {
 
     res.setHeader('Cache-Control', 'no-store');
 
+    // A 416 response usually has no body.
+    if (upstream.status === 416 || !upstream.body) {
+      await upstream.body?.cancel().catch(() => {});
+      return res.end();
+    }
+
     const body = Readable.fromWeb(upstream.body);
 
     req.on('aborted', () => body.destroy());
+
     res.on('close', () => {
-      if (!res.writableEnded) body.destroy();
+      if (!res.writableEnded) {
+        body.destroy();
+      }
     });
 
-      body.on('error', error => {
-        console.error('Audio stream failed:', error.message);
+    body.on('error', error => {
+      console.error('Audio stream failed:', error.message);
 
-        if (!res.headersSent) {
-          res.status(502).end('Audio stream failed.');
-        } else {
-          res.destroy(error);
-        }
-      });
+      if (!res.headersSent) {
+        res.status(502).end('Audio stream failed.');
+      } else if (!res.destroyed) {
+        res.destroy(error);
+      }
+    });
 
-      body.pipe(res);
+    body.pipe(res);
   } catch (error) {
     console.error('Audio proxy failed:', error.message);
 
-    if (!res.headersSent) {
-      res.status(502).send(
+    if (!res.headersSent && !res.destroyed) {
+      return res.status(502).send(
         `Audio proxy failed: ${getFriendlyError(error)}`
       );
-    } else if (!res.writableEnded) {
+    }
+
+    if (!res.writableEnded && !res.destroyed) {
       res.destroy(error);
     }
   }
@@ -314,4 +348,6 @@ app.get('/api/health', (_req, res) => {
 
 app.listen(PORT, '0.0.0.0', () => {
   console.log(`TermWave listening on port ${PORT}`);
+  console.log(`yt-dlp executable: ${YTDLP}`);
+  console.log(`Cookies configured: ${Boolean(COOKIES_FILE)}`);
 });
