@@ -5,17 +5,279 @@
 <title>TERMWAVE</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-:root{color-scheme:dark;--bg:#10110f;--panel:#171915;--panel2:#1d201b;--line:#30352c;--text:#e2e8d8;--muted:#8a9581;--accent:#b6f36b;--accent-rgb:182,243,107;--danger:#ff7777;--shadow:0 12px 40px #0005}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:13px 'IBM Plex Mono',monospace;min-height:100vh;background-image:radial-gradient(ellipse at 80% 0%,rgba(var(--accent-rgb),.07),transparent 45%)}button,input{font:inherit}button{cursor:pointer;color:inherit}button:focus-visible,input:focus-visible{outline:2px solid var(--accent);outline-offset:3px}.app{max-width:1440px;margin:auto;padding:22px 24px 120px}.topbar{display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--line);padding-bottom:17px;gap:20px}.brand{display:flex;align-items:center;gap:12px;font-weight:700;letter-spacing:.13em}.brandmark{display:grid;place-items:center;width:38px;height:38px;border:1px solid var(--accent);color:var(--accent);font-size:20px;box-shadow:inset 0 0 18px rgba(var(--accent-rgb),.08)}.brand small{display:block;color:var(--muted);font-weight:400;font-size:10px;letter-spacing:.08em;margin-top:4px}.status{display:flex;gap:8px;align-items:center;color:var(--muted);font-size:11px}.dot{width:7px;height:7px;border-radius:50%;background:var(--accent);box-shadow:0 0 10px var(--accent)}.top-actions{display:flex;gap:8px}.ghost,.iconbtn{border:1px solid var(--line);background:var(--panel);padding:9px 11px}.ghost:hover,.iconbtn:hover{border-color:var(--accent);color:var(--accent)}.layout{display:grid;grid-template-columns:minmax(0,1.55fr) minmax(300px,.8fr);gap:18px;margin-top:20px}.panel{background:var(--panel);border:1px solid var(--line);min-width:0}.panel-head{display:flex;justify-content:space-between;align-items:center;padding:14px 16px;border-bottom:1px solid var(--line);color:var(--muted);font-size:11px;letter-spacing:.08em}.panel-head strong{color:var(--accent);font-weight:500}.searchrow{display:flex;padding:16px;gap:8px;border-bottom:1px solid var(--line)}.searchbox{flex:1;display:flex;gap:9px;align-items:center;background:var(--bg);border:1px solid var(--line);padding:0 12px;min-width:0}.searchbox span{color:var(--accent)}.searchbox input{width:100%;min-width:0;background:transparent;border:0;outline:0;color:var(--text);padding:13px 0}.searchbtn,.primary{background:var(--accent);color:#171b11;border:1px solid var(--accent);padding:0 17px;font-weight:700}.searchbtn:hover,.primary:hover{filter:brightness(1.08)}.results{min-height:230px}.empty{padding:42px 20px;text-align:center;color:var(--muted);line-height:2}.empty b{color:var(--accent);font-weight:500}.track{display:grid;grid-template-columns:42px 54px minmax(0,1fr) auto;gap:12px;align-items:center;padding:11px 15px;border-bottom:1px solid rgba(128,145,111,.13);cursor:pointer}.track:hover,.track.active{background:var(--panel2)}.track.active{box-shadow:inset 2px 0 var(--accent)}.index{color:var(--muted);font-size:11px}.thumb{width:54px;height:40px;object-fit:cover;background:var(--panel2);border:1px solid var(--line)}.track-title{font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.track-channel{font-size:10px;color:var(--muted);margin-top:5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.duration{color:var(--muted);font-size:11px}.queue-list .track{grid-template-columns:22px 40px minmax(0,1fr) auto;padding:10px 12px}.queue-list .thumb{width:40px;height:32px}.player{padding:18px}.now-playing{display:grid;grid-template-columns:112px minmax(0,1fr);gap:16px;align-items:center}.cover-wrap{width:112px;aspect-ratio:1;border:1px solid var(--line);background:var(--bg);position:relative;overflow:hidden}.cover-wrap img{width:100%;height:100%;object-fit:cover}.cover-fallback{display:grid;place-items:center;height:100%;color:var(--accent);font-size:32px}.eyebrow{font-size:10px;color:var(--accent);letter-spacing:.1em;margin-bottom:9px}.now-title{font-size:14px;font-weight:600;line-height:1.6;overflow-wrap:anywhere}.now-channel{font-size:11px;color:var(--muted);margin-top:7px}.visualizer{height:76px;display:flex;align-items:center;justify-content:center;gap:4px;margin:18px 0 8px;background:linear-gradient(90deg,transparent,rgba(var(--accent-rgb),.035),transparent);border-top:1px solid rgba(var(--accent-rgb),.12);border-bottom:1px solid rgba(var(--accent-rgb),.12)}.visualizer canvas{width:100%;height:100%;display:block}.visualizer.off{display:none}.progress-wrap{margin-top:15px}.progress{height:4px;background:var(--line);cursor:pointer;position:relative}.progress-fill{height:100%;width:0;background:var(--accent);position:relative}.progress-fill:after{content:'';position:absolute;right:-4px;top:-3px;width:10px;height:10px;border-radius:50%;background:var(--accent);box-shadow:0 0 8px rgba(var(--accent-rgb),.6)}.times{display:flex;justify-content:space-between;color:var(--muted);font-size:10px;margin-top:8px}.controls{display:flex;align-items:center;justify-content:center;gap:13px;margin-top:17px}.ctrl{background:transparent;border:1px solid transparent;color:var(--muted);font-size:17px;padding:9px}.ctrl:hover,.ctrl.on{color:var(--accent)}.ctrl.play{width:48px;height:48px;border:1px solid var(--accent);background:var(--accent);color:#161b10;font-size:20px}.volume-row{display:flex;align-items:center;gap:10px;margin-top:15px;color:var(--muted)}input[type=range]{accent-color:var(--accent);min-width:0}.volume-row input{width:100%}.settings{padding:16px;display:grid;gap:17px}.setting{display:flex;justify-content:space-between;align-items:center;gap:16px}.setting label{color:var(--muted)}.setting select{background:var(--bg);color:var(--text);border:1px solid var(--line);padding:8px}.accent-picker{display:flex;gap:8px;align-items:center}.swatch{width:22px;height:22px;border:1px solid #ffffff44;border-radius:50%;padding:0}.swatch.selected{outline:2px solid var(--text);outline-offset:2px}.custom-color{width:28px;height:28px;padding:0;border:1px solid var(--line);background:var(--panel)}.switch{appearance:none;width:34px;height:19px;border:1px solid var(--line);background:var(--bg);border-radius:99px;position:relative;cursor:pointer}.switch:before{content:'';position:absolute;width:11px;height:11px;left:3px;top:3px;background:var(--muted);border-radius:50%;transition:.15s}.switch:checked{background:var(--accent);border-color:var(--accent)}.switch:checked:before{left:18px;background:#151910}.log{margin-top:18px}.log-body{padding:12px 16px;min-height:70px;max-height:125px;overflow:auto;color:var(--muted);font-size:10px;line-height:1.9}.log-line .ok{color:var(--accent)}.log-line .warn{color:#f5c76b}.bottom-player{position:fixed;bottom:0;left:0;right:0;background:color-mix(in srgb,var(--panel) 94%,transparent);backdrop-filter:blur(16px);border-top:1px solid var(--line);z-index:10}.bottom-inner{max-width:1440px;margin:auto;padding:11px 24px;display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);align-items:center;gap:20px}.mini-track{display:flex;align-items:center;gap:10px;min-width:0}.mini-track img{width:38px;height:38px;object-fit:cover;background:var(--bg)}.mini-meta{min-width:0}.mini-title{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:11px}.mini-sub{color:var(--muted);font-size:10px;margin-top:4px}.mini-controls{display:flex;align-items:center;gap:7px}.mini-controls button{background:transparent;border:0;font-size:17px;padding:7px}.mini-controls .mini-play{background:var(--accent);color:#151910;width:34px;height:34px}.bottom-right{display:flex;align-items:center;justify-content:flex-end;gap:12px;color:var(--muted);font-size:10px}.kbd{border:1px solid var(--line);padding:3px 5px}.toast{position:fixed;bottom:86px;left:50%;transform:translateX(-50%);background:var(--text);color:var(--bg);padding:10px 15px;box-shadow:var(--shadow);z-index:20;max-width:90vw;display:none}.toast.show{display:block}.hidden{display:none!important}body.light{color-scheme:light;--bg:#f2f4ec;--panel:#fbfcf7;--panel2:#e8ecdf;--line:#d3d9ca;--text:#22281e;--muted:#697361;--shadow:0 12px 40px #2233}body.light .searchbox{background:#fff}body.light .ctrl.play,body.light .primary,body.light .searchbtn{color:#fff}body.light .mini-controls .mini-play{color:#fff}@media(max-width:850px){.layout{grid-template-columns:1fr}.app{padding:15px 12px 120px}.topbar{align-items:flex-start}.status{display:none}.bottom-inner{padding:9px 12px;grid-template-columns:minmax(0,1fr) auto}.bottom-right{display:none}.settings-panel{order:2}.player-panel{order:1}.queue-panel{order:3}.track{grid-template-columns:25px 48px minmax(0,1fr) auto;gap:9px}.thumb{width:48px;height:36px}}@media(max-width:440px){.brand{font-size:11px}.brandmark{width:32px;height:32px}.top-actions .ghost{padding:8px}.now-playing{grid-template-columns:88px minmax(0,1fr)}.cover-wrap{width:88px}.controls{gap:4px}.track-title{font-size:11px}.searchrow{padding:10px}.searchbtn{padding:0 11px}.bottom-inner{gap:8px}.mini-sub{max-width:145px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}}
+:root{
+  color-scheme:dark;
+  --bg:#0f100e;
+  --panel:#161814;
+  --panel2:#1d201a;
+  --line:#2e3329;
+  --text:#e2e8d8;
+  --muted:#8a9581;
+  --dim:#586252;
+  --accent:#b6f36b;
+  --accent-rgb:182,243,107;
+  --accent-text:var(--accent);
+  --on-accent:#10130b;
+  --warn:#f5c76b;
+  --danger:#ff7777;
+  --shadow:0 12px 40px #0007;
+}
+body.light{
+  color-scheme:light;
+  --bg:#eef1e6;--panel:#fafbf6;--panel2:#e9eddf;--line:#cfd6c3;
+  --text:#20271c;--muted:#5d6855;--dim:#9aa38f;
+  --accent-text:color-mix(in srgb,var(--accent) 50%,#0b0f07);
+  --warn:#8a6100;--danger:#b3261e;
+  --shadow:0 12px 40px #2233;
+}
+
+*{box-sizing:border-box;scrollbar-width:thin;scrollbar-color:var(--line) transparent}
+::selection{background:var(--accent);color:var(--on-accent)}
+body{
+  margin:0;min-height:100vh;
+  background:var(--bg);color:var(--text);
+  font:13px/1.55 'IBM Plex Mono',ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  font-variant-numeric:tabular-nums;
+  background-image:
+    radial-gradient(ellipse 60% 40% at 85% 0%,rgba(var(--accent-rgb),.08),transparent 70%),
+    radial-gradient(ellipse 50% 40% at 0% 100%,rgba(var(--accent-rgb),.04),transparent 70%);
+  background-attachment:fixed;
+}
+/* faint CRT scanlines */
+body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:50;
+  background:repeating-linear-gradient(0deg,rgba(255,255,255,.016) 0 1px,transparent 1px 3px)}
+body.light::after{display:none}
+
+button,input,select{font:inherit}
+button{cursor:pointer;color:inherit;border-radius:0}
+:focus-visible{outline:2px solid var(--accent-text);outline-offset:3px}
+.hidden{display:none!important}
+
+.app{max-width:1440px;margin:auto;padding:22px 24px 120px}
+
+/* ---------- top bar ---------- */
+.topbar{display:flex;align-items:center;justify-content:space-between;gap:20px;padding-bottom:18px;border-bottom:1px solid var(--line)}
+.brand{display:flex;align-items:center;gap:14px}
+.brandmark{display:grid;place-items:center;width:40px;height:40px;border:1px solid var(--accent);color:var(--accent-text);font-size:20px;
+  background:rgba(var(--accent-rgb),.06);box-shadow:inset 0 0 18px rgba(var(--accent-rgb),.1),0 0 18px rgba(var(--accent-rgb),.08)}
+.wordmark{font-size:19px;font-weight:700;letter-spacing:.18em}
+.wordmark::after{content:'_';color:var(--accent-text);margin-left:2px;animation:blink 1.1s steps(1) infinite}
+.brand small{display:block;color:var(--muted);font-weight:400;font-size:10px;letter-spacing:.1em;margin-top:3px}
+@keyframes blink{50%{opacity:0}}
+
+.status{display:flex;align-items:center;gap:10px;color:var(--muted);font-size:11px;letter-spacing:.05em}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--accent);box-shadow:0 0 10px var(--accent)}
+.top-actions{display:flex;gap:8px}
+
+.ghost,.iconbtn{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--line);background:var(--panel);padding:8px 12px;font-size:11px;letter-spacing:.06em;
+  transition:border-color .12s,color .12s,background .12s}
+.ghost:hover,.iconbtn:hover{border-color:var(--accent);color:var(--accent-text);background:rgba(var(--accent-rgb),.07)}
+.ghost:active,.iconbtn:active{transform:translateY(1px)}
+.kbd{border:1px solid var(--line);border-bottom-width:2px;padding:0 6px;font-size:10px;line-height:1.7;color:var(--muted);background:var(--bg)}
+
+/* ---------- layout ---------- */
+.layout{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(320px,.85fr);gap:18px;margin-top:20px;align-items:start}
+.col{display:grid;gap:18px;min-width:0}
+.panel{background:var(--panel);border:1px solid var(--line);min-width:0;box-shadow:0 1px 0 rgba(255,255,255,.02) inset}
+
+.panel-head{display:flex;justify-content:space-between;align-items:center;gap:12px;height:42px;padding:0 16px;
+  background:linear-gradient(var(--panel2),var(--panel));border-bottom:1px solid var(--line);
+  color:var(--muted);font-size:11px;letter-spacing:.09em;text-transform:uppercase}
+.panel-head:not(:first-child){border-top:1px solid var(--line)}
+.panel-head i{font-style:normal;color:var(--accent-text);margin-right:8px}
+.panel-head i::after{content:' /';color:var(--dim)}
+.panel-head strong{color:var(--accent-text);font-weight:500}
+.panel-head strong::before{content:'[ ';color:var(--dim)}
+.panel-head strong::after{content:' ]';color:var(--dim)}
+.panel-head label{cursor:pointer}
+
+/* ---------- search ---------- */
+.searchrow{display:flex;gap:10px;padding:16px;border-bottom:1px solid var(--line)}
+.searchbox{flex:1;display:flex;align-items:center;gap:12px;min-width:0;padding:0 14px;background:var(--bg);border:1px solid var(--line);
+  transition:border-color .15s,box-shadow .15s}
+.searchbox:focus-within{border-color:var(--accent);box-shadow:0 0 0 3px rgba(var(--accent-rgb),.12)}
+.searchbox span{color:var(--accent-text);font-weight:700}
+.searchbox input{width:100%;min-width:0;background:transparent;border:0;outline:0;color:var(--text);padding:14px 0;caret-color:var(--accent);caret-shape:block}
+.searchbox input::placeholder{color:var(--muted);opacity:.7}
+.searchbtn,.primary{background:var(--accent);color:var(--on-accent);border:1px solid var(--accent);padding:0 20px;font-size:12px;font-weight:700;letter-spacing:.08em;white-space:nowrap}
+.searchbtn:hover,.primary:hover{filter:brightness(1.08)}
+.searchbtn:active,.primary:active{transform:translateY(1px)}
+
+.results{min-height:230px}
+.empty{padding:44px 20px;text-align:center;color:var(--muted);line-height:2}
+.empty b{color:var(--accent-text);font-weight:500;letter-spacing:.08em}
+.empty span{color:var(--muted);opacity:.75;font-size:12px}
+.empty .glyph{font-size:24px;letter-spacing:.2em;color:var(--accent-text);margin-bottom:12px;line-height:1;text-shadow:0 0 14px rgba(var(--accent-rgb),.45)}
+
+/* ---------- track rows ---------- */
+.track{display:grid;grid-template-columns:42px 54px minmax(0,1fr) auto;gap:12px;align-items:center;padding:10px 16px;
+  border-bottom:1px solid rgba(138,149,129,.12);cursor:pointer;transition:background .1s}
+.track:last-child{border-bottom:0}
+.track:hover{background:var(--panel2)}
+.track:hover .index{color:var(--accent-text)}
+.track.active{background:linear-gradient(90deg,rgba(var(--accent-rgb),.09),transparent 70%);box-shadow:inset 2px 0 var(--accent)}
+.track.active .track-title,.track.active .index{color:var(--accent-text)}
+.index{color:var(--muted);font-size:11px}
+.thumb{width:54px;height:40px;object-fit:cover;background:var(--panel2);border:1px solid var(--line);filter:saturate(.75) contrast(1.05);transition:filter .15s}
+.track:hover .thumb,.track.active .thumb{filter:none}
+.track-title{font-size:12.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.track-channel{font-size:10.5px;color:var(--muted);margin-top:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.duration{color:var(--muted);font-size:11px}
+.queue-list .track{grid-template-columns:22px 40px minmax(0,1fr) auto;padding:9px 12px 9px 14px}
+.queue-list .thumb{width:40px;height:32px}
+.remove{padding:4px 8px!important}
+.remove:hover{border-color:var(--danger)!important;color:var(--danger)!important;background:transparent!important}
+
+/* ---------- player ---------- */
+.player{padding:18px}
+.now-playing{display:grid;grid-template-columns:112px minmax(0,1fr);gap:18px;align-items:center}
+.cover-wrap{position:relative;width:112px;aspect-ratio:1;background:var(--bg);border:1px solid var(--line);overflow:hidden}
+.cover-wrap img{width:100%;height:100%;object-fit:cover;display:block}
+.cover-wrap::before,.cover-wrap::after{content:'';position:absolute;width:12px;height:12px;border:2px solid var(--accent);z-index:1;pointer-events:none}
+.cover-wrap::before{top:0;left:0;border-right:0;border-bottom:0}
+.cover-wrap::after{bottom:0;right:0;border-left:0;border-top:0}
+.cover-fallback{display:grid;place-items:center;height:100%;color:var(--accent-text);font-size:34px;text-shadow:0 0 16px rgba(var(--accent-rgb),.4)}
+.eyebrow{font-size:10px;color:var(--accent-text);letter-spacing:.12em;margin-bottom:8px}
+.now-title{font-size:15px;font-weight:600;line-height:1.5;overflow-wrap:anywhere;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.now-channel{font-size:11px;color:var(--muted);margin-top:6px}
+
+.visualizer{display:flex;align-items:center;justify-content:center;height:84px;margin:20px 0 4px;padding:6px 8px;
+  background:repeating-linear-gradient(0deg,rgba(var(--accent-rgb),.07) 0 1px,transparent 1px 20px),var(--bg);border:1px solid var(--line)}
+.visualizer canvas{width:100%;height:100%;display:block}
+.visualizer.off{display:none}
+
+/* segmented block progress bar */
+.progress-wrap{margin-top:16px}
+.progress{position:relative;height:12px;cursor:pointer;background:repeating-linear-gradient(90deg,var(--line) 0 6px,transparent 6px 8px)}
+.progress-fill{position:relative;height:100%;width:0;background:repeating-linear-gradient(90deg,var(--accent) 0 6px,transparent 6px 8px)}
+.progress-fill::after{content:'';position:absolute;right:-2px;top:-4px;bottom:-4px;width:2px;background:var(--accent);box-shadow:0 0 8px rgba(var(--accent-rgb),.7)}
+.times{display:flex;justify-content:space-between;margin-top:10px;color:var(--muted);font-size:10.5px}
+
+.controls{display:flex;align-items:center;justify-content:center;gap:10px;margin-top:18px}
+.ctrl{display:inline-grid;place-items:center;min-width:40px;height:40px;padding:0 8px;background:transparent;border:1px solid var(--line);color:var(--muted);font-size:16px;
+  transition:border-color .12s,color .12s,background .12s}
+.ctrl:hover{border-color:var(--accent);color:var(--accent-text)}
+.ctrl.on{color:var(--accent-text);border-color:var(--accent);background:rgba(var(--accent-rgb),.1)}
+.ctrl:active{transform:translateY(1px)}
+.ctrl.play{width:54px;height:54px;background:var(--accent);border-color:var(--accent);color:var(--on-accent);font-size:20px;box-shadow:0 0 20px rgba(var(--accent-rgb),.25)}
+.ctrl.play:hover{filter:brightness(1.08);color:var(--on-accent)}
+
+.volume-row{display:grid;grid-template-columns:auto minmax(0,1fr) 40px auto;align-items:center;gap:12px;margin-top:18px;padding-top:16px;border-top:1px dashed var(--line);color:var(--muted);font-size:11px;letter-spacing:.08em}
+.volume-row #volumeLabel{text-align:right;color:var(--text)}
+.volume-row .ctrl{height:30px;min-width:38px;font-size:12px}
+
+/* range inputs */
+input[type=range]{-webkit-appearance:none;appearance:none;height:18px;margin:0;min-width:0;background:transparent;cursor:pointer}
+input[type=range]::-webkit-slider-runnable-track{height:4px;background:linear-gradient(90deg,var(--accent) var(--fill,50%),var(--line) var(--fill,50%))}
+input[type=range]::-moz-range-track{height:4px;background:var(--line)}
+input[type=range]::-moz-range-progress{height:4px;background:var(--accent)}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:8px;height:16px;margin-top:-6px;background:var(--accent);border:0;border-radius:0;box-shadow:0 0 8px rgba(var(--accent-rgb),.5)}
+input[type=range]::-moz-range-thumb{width:8px;height:16px;background:var(--accent);border:0;border-radius:0}
+
+/* ---------- settings ---------- */
+.settings{display:grid;padding:4px 16px 8px}
+.setting{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:13px 0;border-bottom:1px dashed var(--line)}
+.setting:last-child{border-bottom:0}
+.setting label{color:var(--muted)}
+.settings>.ghost{margin:10px 0 8px;justify-content:flex-start}
+.setting select{appearance:none;-webkit-appearance:none;min-width:150px;padding:8px 30px 8px 10px;background-color:var(--bg);color:var(--text);border:1px solid var(--line);border-radius:0;cursor:pointer;
+  background-image:linear-gradient(45deg,transparent 50%,var(--muted) 50%),linear-gradient(135deg,var(--muted) 50%,transparent 50%);
+  background-position:calc(100% - 15px) 50%,calc(100% - 10px) 50%;background-size:5px 5px;background-repeat:no-repeat}
+.setting select:hover{border-color:var(--accent)}
+.setting input[type=range]{flex:0 1 150px}
+
+.accent-picker{display:flex;gap:8px;align-items:center}
+.swatch{width:22px;height:22px;padding:0;border:1px solid rgba(255,255,255,.25);border-radius:0}
+.swatch:hover{transform:translateY(-1px)}
+.swatch.selected{outline:2px solid var(--text);outline-offset:2px}
+.custom-color{width:28px;height:28px;padding:0;border:1px solid var(--line);background:var(--panel);cursor:pointer}
+
+/* text-style toggle: [OFF] / [ ON] */
+.switch{appearance:none;-webkit-appearance:none;position:relative;width:50px;height:22px;margin:0;border:1px solid var(--line);background:var(--bg);cursor:pointer;vertical-align:middle;transition:background .12s,border-color .12s}
+.switch::before{content:'OFF';position:absolute;inset:0;display:grid;place-items:center;font-size:10px;letter-spacing:.1em;color:var(--muted)}
+.switch:checked{background:var(--accent);border-color:var(--accent)}
+.switch:checked::before{content:'ON';color:var(--on-accent);font-weight:700}
+
+/* ---------- logs ---------- */
+.log{margin-top:18px}
+.log-body{padding:12px 16px;min-height:70px;max-height:132px;overflow:auto;background:var(--bg);color:var(--muted);font-size:11px;line-height:1.9}
+.log-line .ok{color:var(--accent-text)}
+.log-line .warn{color:var(--warn)}
+#systemLog{font-size:10.5px}
+
+/* ---------- status line ---------- */
+.bottom-player{position:fixed;left:0;right:0;bottom:0;z-index:10;
+  background:color-mix(in srgb,var(--panel) 92%,transparent);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
+  border-top:1px solid color-mix(in srgb,var(--accent) 40%,var(--line))}
+.bottom-inner{max-width:1440px;margin:auto;padding:10px 24px;display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);align-items:center;gap:20px}
+.mini-track{display:flex;align-items:center;gap:12px;min-width:0}
+.mini-track img{width:40px;height:40px;flex:none;object-fit:cover;background:var(--panel2);border:1px solid var(--line)}
+.mini-track img[src=""]{display:none}
+.mini-meta{min-width:0}
+.mini-title{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:12px}
+.mini-sub{margin-top:2px;color:var(--muted);font-size:10.5px}
+.mini-controls{display:flex;align-items:center;gap:6px}
+.mini-controls button{display:grid;place-items:center;width:34px;height:34px;padding:0;background:transparent;border:1px solid transparent;font-size:16px;color:var(--muted)}
+.mini-controls button:hover{color:var(--accent-text);border-color:var(--line)}
+.mini-controls .mini-play{width:38px;height:38px;background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
+.mini-controls .mini-play:hover{color:var(--on-accent);filter:brightness(1.08)}
+.bottom-right{display:flex;align-items:center;justify-content:flex-end;gap:10px;color:var(--muted);font-size:10.5px;letter-spacing:.06em}
+#bottomStatus{color:var(--text);margin-right:6px}
+
+.toast{position:fixed;left:50%;bottom:92px;transform:translateX(-50%);z-index:20;display:none;max-width:90vw;padding:10px 16px;
+  background:var(--text);color:var(--bg);border-left:3px solid var(--accent);box-shadow:var(--shadow)}
+.toast.show{display:block}
+
+/* ---------- responsive ---------- */
+@media (max-width:850px){
+  .layout{grid-template-columns:1fr;gap:16px}
+  .col{display:contents}
+  .search-panel{order:0}.player-panel{order:1}.queue-panel{order:2}.settings-panel{order:3}
+  .app{padding:15px 12px 120px}
+  .topbar{align-items:flex-start}
+  .status{display:none}
+  .bottom-inner{padding:9px 12px;grid-template-columns:minmax(0,1fr) auto;gap:12px}
+  .bottom-right{display:none}
+  .track{grid-template-columns:25px 48px minmax(0,1fr) auto;gap:10px;padding:10px 12px}
+  .thumb{width:48px;height:36px}
+  .queue-list .track{grid-template-columns:22px 40px minmax(0,1fr) auto}
+  .queue-list .thumb{width:40px;height:32px}
+}
+@media (max-width:440px){
+  .wordmark{font-size:15px}
+  .brand small{display:none}
+  .brandmark{width:34px;height:34px}
+  .top-actions .ghost{padding:8px}
+  .top-actions .kbd{display:none}
+  .now-playing{grid-template-columns:88px minmax(0,1fr);gap:14px}
+  .cover-wrap{width:88px}
+  .controls{gap:5px}
+  .ctrl{min-width:36px}
+  .track-title{font-size:11.5px}
+  .searchrow{padding:10px}
+  .searchbtn{padding:0 12px}
+  .setting select{min-width:120px}
+  .mini-sub{max-width:145px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+}
+@media (prefers-reduced-motion:reduce){
+  .wordmark::after{animation:none}
+  *{transition:none!important}
+}
 </style></head>
 <body><div class="app">
-<header class="topbar"><div class="brand"><div class="brandmark">♬</div><div>TERMWAVE <small>YOUTUBE AUDIO TERMINAL // v1.0.0</small></div></div><div class="status"><span class="dot"></span><span id="connection">LOCAL NODE READY</span><span>·</span><span id="clock">--:--:--</span></div><div class="top-actions"><button class="ghost" id="themeQuick" title="Toggle light/dark">◐ THEME</button><button class="ghost" id="focusSearch">⌕ SEARCH</button></div></header>
-<div class="layout"><main class="panel search-panel"><div class="panel-head"><span>01 / DISCOVERY</span><strong id="resultCount">READY</strong></div><form class="searchrow" id="searchForm"><div class="searchbox"><span>›_</span><input id="query" autocomplete="off" placeholder="Search YouTube tracks..." aria-label="Search YouTube tracks"></div><button class="searchbtn" type="submit">EXECUTE ↵</button></form><div class="results" id="results"><div class="empty"><b>TERM WAVE AUDIO SUBSYSTEM</b><br>Search YouTube to populate results.<br><span>TIP: use artist + track for cleaner results.</span></div></div><div class="panel-head"><span>OUTPUT / SEARCH LOG</span><span id="searchStatus">IDLE</span></div><div class="log-body" id="searchLog"><div class="log-line">[SYS] Waiting for query input...</div></div></main>
-<aside class="panel player-panel"><div class="panel-head"><span>02 / DECK A</span><strong id="playState">STANDBY</strong></div><div class="player"><div class="now-playing"><div class="cover-wrap" id="coverWrap"><div class="cover-fallback">♫</div></div><div><div class="eyebrow">NOW PLAYING // STREAM</div><div class="now-title" id="nowTitle">No track loaded</div><div class="now-channel" id="nowChannel">Awaiting input...</div></div></div><div class="visualizer" id="visualizer"><canvas id="vizCanvas"></canvas></div><div class="progress-wrap"><div class="progress" id="progress" role="slider" aria-label="Seek playback" tabindex="0"><div class="progress-fill" id="progressFill"></div></div><div class="times"><span id="currentTime">00:00</span><span id="duration">00:00</span></div></div><div class="controls"><button class="ctrl" id="shuffleBtn" title="Shuffle">⤨</button><button class="ctrl" id="prevBtn" title="Previous track">⏮</button><button class="ctrl play" id="playBtn" title="Play">▶</button><button class="ctrl" id="nextBtn" title="Next track">⏭</button><button class="ctrl" id="repeatBtn" title="Repeat off">↻</button></div><div class="volume-row"><span>VOL</span><input id="volume" type="range" min="0" max="1" step="0.01" value="0.8" aria-label="Volume"><span id="volumeLabel">80%</span><button class="ctrl" id="muteBtn" title="Mute">◖))</button></div></div>
-<div class="panel-head"><span>03 / VISUAL OUTPUT</span><span><label for="vizToggle">VISUALIZER</label> <input class="switch" id="vizToggle" type="checkbox" checked></span></div><div class="settings"><div class="setting"><label for="vizMode">Render mode</label><select id="vizMode"><option value="bars">Spectrum bars</option><option value="wave">Waveform</option><option value="mirror">Mirrored spectrum</option></select></div><div class="setting"><label for="vizSensitivity">Sensitivity</label><input id="vizSensitivity" type="range" min="0.5" max="2.5" step="0.1" value="1.2" style="width:125px"></div></div>
+<header class="topbar"><div class="brand"><div class="brandmark">♬</div><div><span class="wordmark">TERMWAVE</span><small>YOUTUBE AUDIO TERMINAL // v1.0.0</small></div></div><div class="status"><span class="dot"></span><span id="connection">LOCAL NODE READY</span><span>·</span><span id="clock">--:--:--</span></div><div class="top-actions"><button class="ghost" id="themeQuick" title="Toggle light/dark">◐ THEME</button><button class="ghost" id="focusSearch">⌕ SEARCH <span class="kbd">/</span></button></div></header>
+<div class="layout"><div class="col col-main"><main class="panel search-panel"><div class="panel-head"><span><i>01</i>DISCOVERY</span><strong id="resultCount">READY</strong></div><form class="searchrow" id="searchForm"><div class="searchbox"><span aria-hidden="true">❯</span><input id="query" autocomplete="off" placeholder="Search YouTube tracks..." aria-label="Search YouTube tracks"></div><button class="searchbtn" type="submit">EXECUTE ↵</button></form><div class="results" id="results"><div class="empty"><div class="glyph" aria-hidden="true">▁▂▃▅▇▅▃▂▁</div><b>TERMWAVE AUDIO SUBSYSTEM</b><br>Search YouTube to populate results.<br><span>TIP: use artist + track for cleaner results.</span></div></div><div class="panel-head"><span>OUTPUT / SEARCH LOG</span><span id="searchStatus">IDLE</span></div><div class="log-body" id="searchLog"><div class="log-line">[SYS] Waiting for query input...</div></div></main>
+<section class="panel queue-panel"><div class="panel-head"><span><i>04</i>PLAY QUEUE</span><span><strong id="queueCount">0 TRACKS</strong> <button class="iconbtn" id="clearQueue" style="padding:4px 7px;margin-left:8px">CLEAR</button></span></div><div class="queue-list" id="queue"><div class="empty">Queue is empty.<br><b>Pick a result to start listening.</b></div></div></section></div>
+<div class="col col-side">
+<aside class="panel player-panel"><div class="panel-head"><span><i>02</i>DECK A</span><strong id="playState">STANDBY</strong></div><div class="player"><div class="now-playing"><div class="cover-wrap" id="coverWrap"><div class="cover-fallback">♫</div></div><div><div class="eyebrow">NOW PLAYING // STREAM</div><div class="now-title" id="nowTitle">No track loaded</div><div class="now-channel" id="nowChannel">Awaiting input...</div></div></div><div class="visualizer" id="visualizer"><canvas id="vizCanvas"></canvas></div><div class="progress-wrap"><div class="progress" id="progress" role="slider" aria-label="Seek playback" tabindex="0"><div class="progress-fill" id="progressFill"></div></div><div class="times"><span id="currentTime">00:00</span><span id="duration">00:00</span></div></div><div class="controls"><button class="ctrl" id="shuffleBtn" title="Shuffle">⤨</button><button class="ctrl" id="prevBtn" title="Previous track">⏮</button><button class="ctrl play" id="playBtn" title="Play">▶</button><button class="ctrl" id="nextBtn" title="Next track">⏭</button><button class="ctrl" id="repeatBtn" title="Repeat off">↻</button></div><div class="volume-row"><span>VOL</span><input id="volume" type="range" min="0" max="1" step="0.01" value="0.8" aria-label="Volume"><span id="volumeLabel">80%</span><button class="ctrl" id="muteBtn" title="Mute">◖))</button></div></div>
+<div class="panel-head"><span><i>03</i>VISUAL OUTPUT</span><span><label for="vizToggle">VISUALIZER</label> <input class="switch" id="vizToggle" type="checkbox" checked></span></div><div class="settings"><div class="setting"><label for="vizMode">Render mode</label><select id="vizMode"><option value="bars">Spectrum bars</option><option value="wave">Waveform</option><option value="mirror">Mirrored spectrum</option></select></div><div class="setting"><label for="vizSensitivity">Sensitivity</label><input id="vizSensitivity" type="range" min="0.5" max="2.5" step="0.1" value="1.2" style="width:125px"></div></div>
 </aside>
-<section class="panel queue-panel"><div class="panel-head"><span>04 / PLAY QUEUE</span><span><strong id="queueCount">0 TRACKS</strong> <button class="iconbtn" id="clearQueue" style="padding:4px 7px;margin-left:8px">CLEAR</button></span></div><div class="queue-list" id="queue"><div class="empty">Queue is empty.<br><b>Pick a result to start listening.</b></div></div></section>
-<section class="panel settings-panel"><div class="panel-head"><span>05 / PREFERENCES</span><strong>USER CONFIG</strong></div><div class="settings"><div class="setting"><label for="themeSelect">Color scheme</label><select id="themeSelect"><option value="dark">Dark terminal</option><option value="light">Light terminal</option></select></div><div class="setting"><label>Accent palette</label><div class="accent-picker" id="swatches"><button class="swatch selected" data-color="#b6f36b" style="background:#b6f36b" aria-label="Lime accent"></button><button class="swatch" data-color="#7ee7ff" style="background:#7ee7ff" aria-label="Cyan accent"></button><button class="swatch" data-color="#c6a0ff" style="background:#c6a0ff" aria-label="Purple accent"></button><button class="swatch" data-color="#ff8fab" style="background:#ff8fab" aria-label="Pink accent"></button><button class="swatch" data-color="#ffbd69" style="background:#ffbd69" aria-label="Orange accent"></button><input type="color" class="custom-color" id="customAccent" value="#b6f36b" title="Custom accent color" aria-label="Custom accent color"></div></div><div class="setting"><label for="autoplay">Autoplay next</label><input class="switch" id="autoplay" type="checkbox" checked></div><div class="setting"><label for="remember">Remember settings</label><input class="switch" id="remember" type="checkbox" checked></div><button class="ghost" id="resetSettings" style="text-align:left">↺ RESET PREFERENCES</button></div></section>
-</div><div class="panel log"><div class="panel-head"><span>06 / SYSTEM CONSOLE</span><span id="sysStatus">ALL SYSTEMS NOMINAL</span></div><div class="log-body" id="systemLog"><div class="log-line">[BOOT] TermWave interface initialized.</div><div class="log-line">[INFO] Waiting for media source.</div></div></div></div>
+<section class="panel settings-panel"><div class="panel-head"><span><i>05</i>PREFERENCES</span><strong>USER CONFIG</strong></div><div class="settings"><div class="setting"><label for="themeSelect">Color scheme</label><select id="themeSelect"><option value="dark">Dark terminal</option><option value="light">Light terminal</option></select></div><div class="setting"><label>Accent palette</label><div class="accent-picker" id="swatches"><button class="swatch selected" data-color="#b6f36b" style="background:#b6f36b" aria-label="Lime accent"></button><button class="swatch" data-color="#7ee7ff" style="background:#7ee7ff" aria-label="Cyan accent"></button><button class="swatch" data-color="#c6a0ff" style="background:#c6a0ff" aria-label="Purple accent"></button><button class="swatch" data-color="#ff8fab" style="background:#ff8fab" aria-label="Pink accent"></button><button class="swatch" data-color="#ffbd69" style="background:#ffbd69" aria-label="Orange accent"></button><input type="color" class="custom-color" id="customAccent" value="#b6f36b" title="Custom accent color" aria-label="Custom accent color"></div></div><div class="setting"><label for="autoplay">Autoplay next</label><input class="switch" id="autoplay" type="checkbox" checked></div><div class="setting"><label for="remember">Remember settings</label><input class="switch" id="remember" type="checkbox" checked></div><button class="ghost" id="resetSettings" style="text-align:left">↺ RESET PREFERENCES</button></div></section>
+</div>
+
+
+
+</div><div class="panel log"><div class="panel-head"><span><i>06</i>SYSTEM CONSOLE</span><span id="sysStatus">ALL SYSTEMS NOMINAL</span></div><div class="log-body" id="systemLog"><div class="log-line">[BOOT] TermWave interface initialized.</div><div class="log-line">[INFO] Waiting for media source.</div></div></div></div>
 <div class="bottom-player"><div class="bottom-inner"><div class="mini-track"><img id="miniCover" alt="" src=""><div class="mini-meta"><div class="mini-title" id="miniTitle">TermWave // Ready</div><div class="mini-sub" id="miniSub">No active stream</div></div></div><div class="mini-controls"><button id="miniPrev" title="Previous">⏮</button><button class="mini-play" id="miniPlay" title="Play/pause">▶</button><button id="miniNext" title="Next">⏭</button></div><div class="bottom-right"><span id="bottomStatus">● DISCONNECTED</span><span class="kbd">SPACE</span><span>PLAY/PAUSE</span></div></div></div><div class="toast" id="toast" role="status"></div><audio id="audio" crossorigin="anonymous"></audio>
 <script>
 (() => {
@@ -46,4 +308,10 @@ $('searchForm').addEventListener('submit',e=>{e.preventDefault();search($('query
 audio.addEventListener('timeupdate',()=>{$('progressFill').style.width=audio.duration?audio.currentTime/audio.duration*100+'%':'0%';$('currentTime').textContent=fmt(audio.currentTime);$('duration').textContent=fmt(audio.duration)});audio.addEventListener('play',()=>{$('playState').textContent='PLAYING';$('playBtn').textContent='⏸';$('miniPlay').textContent='⏸';$('bottomStatus').textContent='● STREAM ACTIVE'});audio.addEventListener('pause',()=>{if(audio.ended)return;$('playState').textContent='PAUSED';$('playBtn').textContent='▶';$('miniPlay').textContent='▶';$('bottomStatus').textContent='● PAUSED'});audio.addEventListener('ended',()=>{if(repeatMode===2){audio.currentTime=0;audio.play()}else if($('autoplay').checked&&queue.length)next();else if(repeatMode===1&&queue.length)next();else{$('playState').textContent='ENDED';$('playBtn').textContent='▶';$('miniPlay').textContent='▶'}});
 $('vizToggle').onchange=()=>{$('visualizer').classList.toggle('off',!$('vizToggle').checked);if($('vizToggle').checked)initVisualizer();saveSettings()};$('vizMode').onchange=saveSettings;$('vizSensitivity').oninput=saveSettings;$('themeSelect').onchange=()=>setTheme($('themeSelect').value);$('swatches').querySelectorAll('.swatch').forEach(b=>b.onclick=()=>applyAccent(b.dataset.color));$('customAccent').oninput=e=>applyAccent(e.target.value);['autoplay','remember'].forEach(id=>$(id).onchange=()=>{saveSettings();if(id==='remember'&&!$('remember').checked)localStorage.removeItem('termwave-settings')});$('resetSettings').onclick=()=>{try{localStorage.removeItem('termwave-settings')}catch{};loadSettings();toast('Preferences reset to defaults.');log('Preferences reset.')};document.addEventListener('keydown',e=>{if(e.code==='Space'&&!['INPUT','TEXTAREA','SELECT','BUTTON'].includes(document.activeElement.tagName)){e.preventDefault();togglePlay()}if(e.key==='/'&&!['INPUT','TEXTAREA'].includes(document.activeElement.tagName)){e.preventDefault();$('query').focus()}});function tick(){$('clock').textContent=new Date().toLocaleTimeString('en-US',{hour12:false})}tick();setInterval(tick,1000);loadSettings();fetch('/api/health').then(r=>r.json()).then(d=>{if(d.ok){$('connection').textContent='LOCAL NODE ONLINE';log('Backend connection verified.')}}).catch(()=>{$('connection').textContent='BACKEND OFFLINE';log('Backend not reachable. Start the Node server to enable search/playback.','warn')});
 })();
+</script>
+<script>
+(()=>{const paint=el=>{const min=+el.min||0,max=+el.max||100;el.style.setProperty('--fill',((el.value-min)/(max-min)*100)+'%')};
+const all=[...document.querySelectorAll('input[type=range]')];
+all.forEach(el=>{paint(el);el.addEventListener('input',()=>paint(el))});
+document.getElementById('resetSettings').addEventListener('click',()=>setTimeout(()=>all.forEach(paint),0))})();
 </script></body></html>
